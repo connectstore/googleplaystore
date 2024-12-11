@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gift Card Google Play Store</title>
+    <meta property="og:site_name" content="Connect Store">
+    <meta name="description" content="Compre seu cartão pré-pago na Connect de forma rápida e segura e aproveite créditos para apps, jogos, assinaturas e mais. Pagamento fácil e seguro via PIX.">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FFFFFF;
+            box-sizing: border-box;
+        }
+
+        .toolbar {
+            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .toolbar .header {
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+
+        .header .logo {
+            display: flex;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .header .logo img {
+            padding: 5px;
+            width: 40px;
+            margin-right: -2.5px;
+        }
+
+        .header .title,
+        .header .powered-by {
+            text-align: left;
+            margin-top: -12px;
+        }
+
+        .header .title {
+            font-size: 30px;
+            font-weight: bold;
+            color: #FFFFFF;
+            white-space: nowrap;
+        }
+
+        .header .powered-by {
+            font-size: 16px;
+            color: #FFFFFF;
+            white-space: nowrap;
+        }
+
+        .header .profile {
+            flex-grow: 1;
+            text-align: right;
+        }
+
+        .header .profile img {
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .toolbar-options {
+            background-color: #FFFFFF;
+            display: flex;
+            padding: 0;
+            margin: 0;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            box-sizing: border-box;
+            margin-top: -3px;
+        }
+
+        .toolbar-options .option {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .toolbar-options .option.active {
+            color: #4E75AF; /* Vermelho */
+            font-weight: bold;
+            border-bottom: 2px solid #4E75AF;
+        }
+
+        .toolbar-options .option.inactive {
+            color: #757575;
+        }
+
+        .content {
+            padding: 8px;
+        }
+
+        .content .section-title {
+            text-align: center;
+            color: #616161;
+            margin-bottom: 8px;
+        }
+
+        .container {
+            max-width: 500px;
+            background-color: #ffffff;
+            padding: 20px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card.selected {
+            border: 2px solid #4E75AF; /* Vermelho */
+            transform: scale(1.05);
+        }
+
+        .highlight {
+            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
+            color: #FFFFFF;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-left: auto;
+        }
+
+        .title {
+            font-size: 30px;
+            color: #333333;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666666;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .value {
+            flex-grow: 1;
+            font-size: 20px;
+            color: #333333;
+            margin-left: 10px;
+        }
+
+        .popup {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding-top: 32px;
+            padding-bottom: 8px;
+            background-color: #ffffff;
+            box-shadow: 0px -4px 8px rgba(0, 0, 0, 0.2);
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            transition: transform 0.3s ease-in-out;
+            transform: translateY(100%);
+            max-height: 50%;
+            overflow-y: auto;
+        }
+
+        .popup.active {
+            display: block;
+            transform: translateY(0);
+        }
+
+        .popup .close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .popup .summary {
+            font-size: 20px;
+            color: #616161;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .popup .total {
+            font-size: 40px;
+            color: #616161;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .popup .fee {
+            font-size: 16px;
+            padding: 8px;
+            color: #616161;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .popup .message {
+            font-size: 16px;
+            color: #616161;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .button {
+            max-width: 350px;
+            margin: 8px 0;
+            display: block;
+            margin: 0 auto;
+            width: 100%;
+            padding: 14px;
+            text-align: center;
+            font-size: 18px;
+            color: #FFFFFF;
+            background-color: #4E75AF; /* Vermelho */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #4E75AF; /* Vermelho escuro */
+        }
+
+        .cancel-button:hover {
+            background-color: #FF0000; /* Vermelho */
+        }
+
+        .bottom-button {
+            position: relative;
+            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .cancel-button {
+            background: linear-gradient(90deg, #B22234, #FF0000); /* Vermelho e Vermelho escuro */
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .pay-button {
+            background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .logo {
+            width: 50px;
+            height: auto;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: -12px;
+        }
+       
+        .adcard {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .adcard img {
+            width: 50px;
+            height: 50px;
+        }
+        .adcard-content {
+            max-width: 80%;
+        }
+        .adcard-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333333;
+            margin-bottom: 5px;
+        }
+        .adcard-text {
+            font-size: 14px;
+            color: #666666;
+            margin-bottom: 5px;
+        }
+        .adcard-text strong {
+            color: #212121;
+        }
+        .adcard-text.green {
+        	font-size: 16px;
+            color: green;
+        }
+        .adhighlight-card {
+            background-color: #f5f5f5;
+            border-left: 5px solid #3C3B6E;
+        }
+       
+       .highlightblackfriday {
+            background: linear-gradient(90deg, #4E75AF, #4E75AF);
+            color: #FFFFFF;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-left: 3px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <div class="header">
+            <div class="logo">
+                <img src="logo.png" alt="Logo" class="logo">
+                <div>
+                    <div class="title">Play Store</div>
+                    <div class="powered-by">Powered by Connect</div>
+                </div>
+            </div>
+            <div class="profile">
+                <img src="banner.png" alt="Profile Picture" />
+            </div>
+        </div>
+        <div class="toolbar-options">
+            <div class="option active">Brasil</div>
+            <div class="option inactive"></div>
+        </div>
+    </div>
+   
+    <div class="container">
+    
+    <div class="adcard adhighlight-card">
+    <div class="adcard-content">
+     <div class="adcard-title">
+      Seu saldo, suas regras! 👾
+     </div>
+     <div class="adcard-text">
+      Use seu saldo para muito mais: compre apps, desbloqueie itens em jogos e faça assinaturas nos seus apps favoritos!
+     </div>
+     <!--
+     <div class="adcard-text green">
+      A oferta TÁ ON para você! 
+     </div> -->
+    </div>
+   </div>
+  
+        <div class="subtitle">Selecione o valor do cartão pré-pago</div>
+
+    <div class="card" onclick="selectCard('value15')">
+        <input type="radio" name="value" id="value15" value="15">
+        <label for="value15" class="value">R$ 15</label>
+        <span class="highlight">Mais escolhido!</span>
+    </div>
+    <div class="card" onclick="selectCard('value40')">
+        <input type="radio" name="value" id="value40" value="40">
+        <label for="value40" class="value">R$ 40</label>
+    </div>
+    <div class="card" onclick="selectCard('value50')">
+        <input type="radio" name="value" id="value50" value="50">
+        <label for="value50" class="value">R$ 50</label>
+    </div>
+    <div class="card" onclick="selectCard('value80')">
+        <input type="radio" name="value" id="value80" value="80">
+        <label for="value80" class="value">R$ 80</label>
+    </div>
+    
+    <!-- Anúncio
+    <div class="card" onclick="selectCard('value100')">
+        <input type="radio" name="value" id="value100" value="100">
+        <label for="value100" class="value">R$ 100</label>
+    </div>
+    -->
+
+<div class="popup" id="paymentPopup">
+    <div class="summary">Valor final do pedido</div>
+    <div class="total" id="orderTotal">R$ 20</div>
+    <div class="fee">Para processamento e emissão do cartão pré-pago incluímos uma taxa de R$ 5.</div>
+    <button href="#" class="button pay-button" id="payButton">REALIZAR PAGAMENTO</button>
+    <button class="button cancel-button" id="cancelButton">CANCELAR PEDIDO</button>
+</div>
+
+<button class="button bottom-button" id="continueButton">CONTINUAR</button>
+
+</div>
+<script>
+        // Oculta o botão "Continuar" ao abrir a página.
+        document.getElementById('continueButton').classList.add('hidden');
+        
+        document.addEventListener("DOMContentLoaded", function() {
+        // Seleciona automaticamente o cartão ao carregar a página
+        selectCard('value15'); 
+    });
+        	
+        function selectCard(cardId) {
+            document.getElementById('paymentPopup').classList.remove('active');
+            document.getElementById('continueButton').classList.remove('hidden'); 
+            var cards = document.querySelectorAll('.card');
+            cards.forEach(function(card) {
+                card.classList.remove('selected');
+            });
+
+            var selectedCard = document.querySelector('input#' + cardId);
+            selectedCard.parentElement.classList.add('selected');
+            selectedCard.checked = true;
+        }
+
+        document.getElementById('continueButton').addEventListener('click', function() {
+            var selectedValue = document.querySelector('input[name="value"]:checked');
+            if (selectedValue) {
+                var value = selectedValue.value;
+                var total = parseInt(value) + 5;
+                document.getElementById('orderTotal').textContent = 'R$ ' + total;
+                document.getElementById('paymentPopup').classList.add('active');
+                document.getElementById('continueButton').classList.add('hidden'); // Oculta o botão "Continuar"
+            } else {
+                alert('Por favor, selecione um valor.');
+            }
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function() {
+            document.getElementById('paymentPopup').classList.remove('active');
+            document.getElementById('continueButton').classList.remove('hidden'); // Mostra o botão "Continuar"
+        });
+        
+       // Antiga forma de pagar
+        /* document.getElementById('payButton').addEventListener('click', function() {
+            var selectedValue = document.querySelector('input[name="value"]:checked').value;
+            var total = parseInt(selectedValue) + 5;
+            
+            // Verifica a URL para determinar se contém "iCloud"
+            var isICloud = window.location.search.includes("product=icloud");
+            var appStoreName = isICloud ? "App Store ICloud" : "App Store"; // Define o nome com base na verificação
+
+            var message = "Quero concluir o meu pedido #APPSTORE" + selectedValue + "\n\nDetalhes do pedido\n1x R$ " + selectedValue + " (" + appStoreName + ")\n1x R$ 5 (Taxa de processamento)";
+            var whatsappUrl = "https://api.whatsapp.com/send?phone=553398801838&text=" + encodeURIComponent(message);
+            window.location.href = whatsappUrl;
+        }); */
+        
+        // Nova forma de pagar
+document.getElementById('payButton').addEventListener('click', function() {
+    var selectedValue = document.querySelector('input[name="value"]:checked').value;
+    var total = parseInt(selectedValue) + 5;
+    
+    // Verifica a URL para determinar se contém "iCloud"
+    var isICloud = window.location.search.includes("product=icloud");
+    var appStoreName = isICloud ? "App Store ICloud" : "App Store"; // Define o nome com base na verificação
+    
+    // Constrói a URL de checkout corretamente
+    var checkoutUrl = "https://connectstore.github.io/checkout?payment=" + total + "&product=" + encodeURIComponent(appStoreName) + "&price=" + selectedValue;
+    window.location.href = checkoutUrl;
+});
+        
+    </script>
+</body>
+</html>
