@@ -456,12 +456,33 @@
         });
          
      // Nova forma de pagar
-    document.getElementById('payButton').addEventListener('click', function() {
+    document.getElementById('payButton').addEventListener('click', function () {
     var selectedValue = document.querySelector('input[name="value"]:checked').value;
     var total = parseInt(selectedValue) + 5;
-    
+
+    // JSON com os mapeamentos
+    var productMapping = {
+        "crunchyroll": "Google Play Store - assinatura Crunchyroll",
+        "minecraft": "Google Play Store - Minecraft",
+        "capcut": "Google Play Store - assinatura CapCut"
+    };
+
+    // Valor padrão do produto
+    var product = "Google Play Store";
+
+    // Verifica se há o atributo 'product' na URL
+    var urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('product')) {
+        var productKey = urlParams.get('product');
+
+        // Verifica no JSON se existe o mapeamento para o parâmetro
+        if (productMapping[productKey]) {
+            product = productMapping[productKey];
+        }
+    }
+
     // Constrói a URL de checkout corretamente
-    var checkoutUrl = "https://connectstore.github.io/checkout?payment=" + total + "&product=Google%20Play%20Store" + "&price=" + selectedValue;
+    var checkoutUrl = "https://connectstore.github.io/checkout?payment=" + total + "&product=" + encodeURIComponent(product) + "&price=" + selectedValue;
     window.location.href = checkoutUrl;
 });
     </script>
