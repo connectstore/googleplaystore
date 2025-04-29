@@ -262,6 +262,19 @@
             margin-top: 20px;
             margin-bottom: 10px;
         }
+        
+            .bottom-buttonfix {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      right: 10px;
+      background: linear-gradient(90deg, #3C3B6E, #4E75AF); /* Azul e Vermelho */
+      color: white;
+      text-align: center;
+      padding: 15px;
+      border-radius: 8px;
+      z-index: 100;
+    }
 
         .cancel-button {
             background: linear-gradient(90deg, #B22234, #FF0000); /* Vermelho e Vermelho escuro */
@@ -456,9 +469,9 @@
     <button class="button cancel-button" id="cancelButton">CANCELAR PEDIDO</button>
 </div>
 
-<button class="button bottom-button" id="continueButton">CONTINUAR</button>
-
 </div>
+<button class="button bottom-buttonfix" id="continueButton">CONTINUAR</button>
+
 <script>
         // Oculta o botão "Continuar" ao abrir a página.
         document.getElementById('continueButton').classList.add('hidden');
