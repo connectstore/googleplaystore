@@ -224,6 +224,14 @@
             text-align: center;
             margin-bottom: 8px;
         }
+        
+        .popup .feeclick {
+            font-size: 15px;
+            color: #4E75AF;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
 
         .popup .message {
             font-size: 16px;
@@ -392,6 +400,38 @@
             margin-left: 3px;
         }
         
+     .tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.toast-tooltip {
+  display: none;
+  position: absolute;
+  top: 28px; /* ajusta a posição abaixo do ícone */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  max-width: 240px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.toast-tooltip::after {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent transparent #333 transparent;
+}
     </style>
 </head>
 <body>
@@ -463,17 +503,40 @@
     
 
 <div class="popup" id="paymentPopup">
-    <div class="summary">Valor final do pedido</div>
-    <div class="total" id="orderTotal">R$ 20</div>
-    <div class="fee">Para processamento e emissão do cartão pré-pago incluímos uma taxa de R$ 5.</div>
+    <div class="summary">
+  Valor final do pedido 
+  <span class="tooltip-wrapper">
+    <i class="fas fa-question-circle info-icon" onclick="showFeeToast()"></i>
+    <div class="toast-tooltip" id="toastTooltip">
+      Para processamento e emissão do código do cartão pré-pago, incluímos uma taxa de serviço de R$ 5.
+    </div>
+  </span>
+</div>
+
+    <div class="total" id="orderTotal">R$ 20</div>      
+    
+    <div class="fee">Ao continuar, você aceita os <a class="feeclick" href="https://connectstore.github.io/terms">Termos e Condições</a> do produto. Após concluir a compra, o Gift Card não poderá ser cancelado ou reembolsado.</div>
+
     <button href="#" class="button pay-button" id="payButton">REALIZAR PAGAMENTO</button>
-    <button class="button cancel-button" id="cancelButton">CANCELAR PEDIDO</button>
+    <button class="toggle-icon" id="cancelButton">
+     <i class="fas fa-chevron-down"></i>
+     </button>
 </div>
 
 </div>
 <button class="button bottom-buttonfix" id="continueButton">CONTINUAR</button>
 
 <script>
+	    // Codigo mostrar taxa
+        function showFeeToast() {
+  const tooltip = document.getElementById("toastTooltip");
+  tooltip.style.display = "block";
+
+  setTimeout(() => {
+    tooltip.style.display = "none";
+  }, 4000); // Exibe por 4 segundos
+}
+
         // Oculta o botão "Continuar" ao abrir a página.
         document.getElementById('continueButton').classList.add('hidden');
         
